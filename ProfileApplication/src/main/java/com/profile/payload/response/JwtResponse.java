@@ -2,9 +2,11 @@ package com.profile.payload.response;
 
 import java.util.List;
 
+import com.profile.common.Constants;
+
 public class JwtResponse {
 	private String token;
-	private String type = "Bearer";
+	private String type = Constants.BEARER;
 	private Long id;
 	private String username;
 	private String email;

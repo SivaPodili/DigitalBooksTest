@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.profile.userngmt.model.User;
 
-public class UserDetailsImpl implements UserDetails {
+public class AuthenticationDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -26,8 +26,8 @@ public class UserDetailsImpl implements UserDetails {
 	private String password;
 
 	private Collection<? extends GrantedAuthority> authorities;
-
-	public UserDetailsImpl(Long id, String username, String email, String password,
+	
+	public AuthenticationDetailsImpl(Long id, String username, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
@@ -35,12 +35,17 @@ public class UserDetailsImpl implements UserDetails {
 		this.password = password;
 		this.authorities = authorities;
 	}
-
-	public static UserDetailsImpl build(User user) {
+	
+	/**
+	 * AuthenticationDetailsImpl method will be getting called when the application receives client requests and check the authentication
+	 * @param user
+	 * @return
+	 */
+	public static AuthenticationDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
-		return new UserDetailsImpl(
+		return new AuthenticationDetailsImpl(
 				user.getId(), 
 				user.getUsername(), 
 				user.getEmail(),
@@ -99,7 +104,7 @@ public class UserDetailsImpl implements UserDetails {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		UserDetailsImpl user = (UserDetailsImpl) o;
+		AuthenticationDetailsImpl user = (AuthenticationDetailsImpl) o;
 		return Objects.equals(id, user.id);
 	}
 }

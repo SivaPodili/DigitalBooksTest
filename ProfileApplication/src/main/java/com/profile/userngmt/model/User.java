@@ -1,7 +1,5 @@
 package com.profile.userngmt.model;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

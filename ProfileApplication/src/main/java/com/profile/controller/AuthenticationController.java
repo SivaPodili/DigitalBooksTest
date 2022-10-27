@@ -1,15 +1,17 @@
 package com.profile.controller;
 
-import java.util.HashSet;
+
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,28 +26,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.profile.common.Constants;
+import com.profile.common.Path;
 import com.profile.model.Profile;
-import com.profile.model.ProfileRequest;
-
-//import com.profile.model.Profile;
-
 import com.profile.payload.response.JwtResponse;
 import com.profile.payload.response.MessageResponse;
 
 import com.profile.security.jwt.JwtUtils;
-import com.profile.userngmt.dao.UserDetailsServiceImpl;
 import com.profile.userngmt.dao.UserRepository;
-import com.profile.userngmt.model.ERole;
 import com.profile.userngmt.model.LoginRequest;
 import com.profile.userngmt.model.SignupRequest;
 import com.profile.userngmt.model.User;
-import com.profile.userngmt.service.UserDetailsImpl;
+import com.profile.userngmt.service.AuthenticationDetailsImpl;
+import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
-public class UserController {
+@RequestMapping(Path.AUTH_PATH)
+public class AuthenticationController {
+	
+	private static final Logger logger =  LogManager.getLogger(AuthenticationController.class);
+	
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -61,11 +62,18 @@ public class UserController {
 	JwtUtils jwtUtils;
 	
 	@Autowired
-	UserDetailsServiceImpl userDetailsServiceImpl;
-
+	AuthenticationDetailsServiceImpl authenticationDetailsServiceImpl;
+	
+	/**
+	 * authenticateUser method is used to signin the user
+	 * @param loginRequest
+	 * @return
+	 */
 	//User Sign in
-		@PostMapping("/signin")
+		@PostMapping(Path.SIGNIN_PATH_V1)
 		public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+			
+			logger.info(Constants.SIGNIN_USER);
 
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -73,7 +81,7 @@ public class UserController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateJwtToken(authentication);
 
-			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+			AuthenticationDetailsImpl userDetails = (AuthenticationDetailsImpl) authentication.getPrincipal();
 			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 					.collect(Collectors.toList());
 
@@ -81,15 +89,22 @@ public class UserController {
 					new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
 		}
 
-		
+	/**
+	 * 	registerUser method is used to register the user
+	 * @param signUpRequest
+	 * @return
+	 */
 	//User Sign up
-		@PostMapping("/signup")
+		@PostMapping(Path.SIGNUP_PATH_V1)
 		public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 			
-			ResponseEntity responseEntity;
-			MessageResponse messageResponse=userDetailsServiceImpl.validSignupRequest(signUpRequest);
+			logger.info(Constants.REGISTER_USER);
 			
-			if(messageResponse.getErrorcode()==400) {
+			
+			ResponseEntity responseEntity;
+			MessageResponse messageResponse=authenticationDetailsServiceImpl.validSignupRequest(signUpRequest);
+			
+			if(messageResponse.getErrorcode()==Constants.BADREQUEST) {
 				responseEntity=ResponseEntity.badRequest().body(messageResponse);
 			}else {
 				// Create new user's account
@@ -98,30 +113,14 @@ public class UserController {
 				user.setRole(signUpRequest.getRole());
 
 				userRepository.save(user);
-			 responseEntity =ResponseEntity.ok(new MessageResponse<String>("User Registered Successfully",200));
+			 responseEntity =ResponseEntity.ok(new MessageResponse<String>(Constants.USER_REGISTERED_SUCCESSFULLY,Constants.SUCCESS));
 				
 			}
+			logger.info(Constants.USER_REGISTERED_SUCCESSFULLY);
 
 			return responseEntity;
 
-		}
+		}		
 		
-		//User can create profiles
-		@PostMapping("/createprofile")
-		public String createProfile(@RequestBody @Valid Profile profile) {
-			userDetailsServiceImpl.createProfileService(profile);
-			//System.out.println(profileRequest.toString());
-			return "Profile is Successfully Created";
-		}
-		
-		
-		//Admin can Search Profiles
-		@GetMapping("/searchprofile")
-		@ResponseBody
-		public List<Profile> SearchProfiles(@RequestParam String associateName) {
-			List<Profile> profileList = userDetailsServiceImpl.findByName(associateName);
-			return profileList;
-		}
 
-		
 }

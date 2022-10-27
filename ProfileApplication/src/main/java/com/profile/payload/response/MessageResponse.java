@@ -1,6 +1,6 @@
 package com.profile.payload.response;
 
-import java.util.List;
+
 
 public class MessageResponse<V> {
 	private V message;
@@ -26,6 +26,10 @@ public class MessageResponse<V> {
 		super();
 		this.message = message;
 		this.errorcode = errorcode;
+	}
+
+	public MessageResponse() {
+		super();
 	}
 
 	

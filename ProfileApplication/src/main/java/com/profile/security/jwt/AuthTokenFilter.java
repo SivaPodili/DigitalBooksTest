@@ -17,14 +17,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.profile.userngmt.dao.UserDetailsServiceImpl;
+import com.profile.common.Constants;
+import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtils jwtUtils;
 
 	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
+	private AuthenticationDetailsServiceImpl userDetailsService;
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -44,16 +45,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			logger.error("Cannot set user authentication: {}", e);
+			logger.error(Constants.CANNOT_SET_USER_AUTHENTICATION, e);
 		}
 
 		filterChain.doFilter(request, response);
 	}
 
 	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authorization");
+		String headerAuth = request.getHeader(Constants.AUTHORIZATION);
 
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(Constants.BEARER)) {
 			return headerAuth.substring(7, headerAuth.length());
 		}
 

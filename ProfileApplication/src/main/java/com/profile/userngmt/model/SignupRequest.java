@@ -1,6 +1,5 @@
 package com.profile.userngmt.model;
 
-import java.util.Set;
 
 import javax.validation.constraints.*;
  

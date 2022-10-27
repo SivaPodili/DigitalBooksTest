@@ -6,25 +6,28 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.profile.common.Constants;
+import com.profile.common.Path;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/test")
+@RequestMapping(Path.AUTH_PATH)
 public class TestController {
-	@GetMapping("/all")
+	@GetMapping(Path.ALL_PATH)
 	public String allAccess() {
-		return "Public Content.";
+		return Constants.PUBLIC_ACCESS;
 	}
 	
-	@GetMapping("/user")
-	@PreAuthorize("hasRole('USER')")
+	@GetMapping(Path.USER_PATH)
+	//@PreAuthorize("hasRole('USER')")
 	public String userAccess() {
-		return "User Content.";
+		return Constants.USER_ACCESS;
 	}
 
 
-	@GetMapping("/admin")
-	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(Path.ADMIN_PATH)
+	//@PreAuthorize("hasRole('ADMIN')")
 	public String adminAccess() {
-		return "Admin Content.";
+		return Constants.ADMIN_ACCESS;
 	}
 }

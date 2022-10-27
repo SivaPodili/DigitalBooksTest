@@ -14,9 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.profile.common.Path;
 import com.profile.security.jwt.AuthEntryPointJwt;
 import com.profile.security.jwt.AuthTokenFilter;
-import com.profile.userngmt.dao.UserDetailsServiceImpl;
+import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +25,7 @@ import com.profile.userngmt.dao.UserDetailsServiceImpl;
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+	AuthenticationDetailsServiceImpl userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
@@ -55,8 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-			.antMatchers("/api/test/**").permitAll()
+			.authorizeRequests().antMatchers(Path.USER_CONTROLLER_PATH).permitAll()
+			.antMatchers(Path.TEST_CONTROLLER_PATH).permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -1,5 +1,7 @@
 package com.profile.userngmt.model;
 
+import com.profile.common.Constants;
+
 public enum ERole {
 	USER("USER"),
 	ADMIN("ADMIN");
@@ -25,7 +27,7 @@ public enum ERole {
 	            }
 	        }
 
-	        throw new IllegalArgumentException("No ERole for value: " + textValue);  
+	        throw new IllegalArgumentException(Constants.NO_ROLE + textValue);  
 	    }   
 	
 }
