@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Preconditions;
 import com.profile.common.Constants;
 import com.profile.common.Path;
 import com.profile.model.Profile;
@@ -33,16 +34,17 @@ import com.profile.payload.response.JwtResponse;
 import com.profile.payload.response.MessageResponse;
 
 import com.profile.security.jwt.JwtUtils;
-import com.profile.userngmt.dao.UserRepository;
+import com.profile.userngmt.dao.AuthenticationRepository;
 import com.profile.userngmt.model.LoginRequest;
 import com.profile.userngmt.model.SignupRequest;
 import com.profile.userngmt.model.User;
 import com.profile.userngmt.service.AuthenticationDetailsImpl;
-import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
+import com.profile.userngmt.service.AuthenticationServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(Path.AUTH_PATH)
+
 public class AuthenticationController {
 	
 	private static final Logger logger =  LogManager.getLogger(AuthenticationController.class);
@@ -51,7 +53,7 @@ public class AuthenticationController {
 	AuthenticationManager authenticationManager;
 
 	@Autowired
-	UserRepository userRepository;
+	AuthenticationRepository authenticationRepository;
 
 	
 
@@ -62,7 +64,7 @@ public class AuthenticationController {
 	JwtUtils jwtUtils;
 	
 	@Autowired
-	AuthenticationDetailsServiceImpl authenticationDetailsServiceImpl;
+	AuthenticationServiceImpl authenticationServiceImpl;
 	
 	/**
 	 * authenticateUser method is used to signin the user
@@ -72,9 +74,11 @@ public class AuthenticationController {
 	//User Sign in
 		@PostMapping(Path.SIGNIN_PATH_V1)
 		public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-			
+			Preconditions.checkArgument(loginRequest!=null,"loginRequest cannot be empty");
 			logger.info(Constants.SIGNIN_USER);
-
+			ResponseEntity responseEntity=ResponseEntity.badRequest().body("Invalid Credentials");
+			
+			try {
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -84,9 +88,13 @@ public class AuthenticationController {
 			AuthenticationDetailsImpl userDetails = (AuthenticationDetailsImpl) authentication.getPrincipal();
 			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 					.collect(Collectors.toList());
-
-			return ResponseEntity.ok(
+			responseEntity=ResponseEntity.ok(
 					new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+
+			return responseEntity;
 		}
 
 	/**
@@ -97,12 +105,12 @@ public class AuthenticationController {
 	//User Sign up
 		@PostMapping(Path.SIGNUP_PATH_V1)
 		public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-			
+			Preconditions.checkArgument(signUpRequest!=null,"SignUpRequest cannot be empty");
 			logger.info(Constants.REGISTER_USER);
 			
 			
 			ResponseEntity responseEntity;
-			MessageResponse messageResponse=authenticationDetailsServiceImpl.validSignupRequest(signUpRequest);
+			MessageResponse messageResponse=authenticationServiceImpl.validSignupRequest(signUpRequest);
 			
 			if(messageResponse.getErrorcode()==Constants.BADREQUEST) {
 				responseEntity=ResponseEntity.badRequest().body(messageResponse);
@@ -112,7 +120,7 @@ public class AuthenticationController {
 						encoder.encode(signUpRequest.getPassword()));
 				user.setRole(signUpRequest.getRole());
 
-				userRepository.save(user);
+				authenticationRepository.save(user);
 			 responseEntity =ResponseEntity.ok(new MessageResponse<String>(Constants.USER_REGISTERED_SUCCESSFULLY,Constants.SUCCESS));
 				
 			}

@@ -13,4 +13,7 @@ public class Path {
 	public static final String USER_CONTROLLER_PATH="/profiletracker/api/auth/**";
 	public static final String TEST_CONTROLLER_PATH="/profiletracker/api/auth/**";
 
+	private Path() {
+		
+	}
 }

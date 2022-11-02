@@ -12,23 +12,24 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Preconditions;
 import com.profile.common.Constants;
 import com.profile.controller.AuthenticationController;
 import com.profile.dao.ProfileRepository;
 import com.profile.model.Profile;
 import com.profile.payload.response.MessageResponse;
-import com.profile.userngmt.dao.UserRepository;
+import com.profile.userngmt.dao.AuthenticationRepository;
 import com.profile.userngmt.model.ERole;
 import com.profile.userngmt.model.SignupRequest;
 import com.profile.userngmt.model.User;
 
 @Service
-public class AuthenticationDetailsServiceImpl implements UserDetailsService {
+public class AuthenticationServiceImpl implements UserDetailsService {
 	
-	private static final Logger logger =  LogManager.getLogger(AuthenticationDetailsServiceImpl.class);
+	private static final Logger logger =  LogManager.getLogger(AuthenticationServiceImpl.class);
 	
 	@Autowired
-	UserRepository userRepository;
+	AuthenticationRepository authenticationRepository;
 	
 	@Autowired
 	ProfileRepository profileRepository;
@@ -37,7 +38,8 @@ public class AuthenticationDetailsServiceImpl implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username)
+		Preconditions.checkArgument(username!=null,"Username cannot be empty");
+		User user = authenticationRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException(Constants.USERNAME_NOT_FOUND + username));
 
 		return AuthenticationDetailsImpl.build(user);
@@ -54,15 +56,16 @@ public class AuthenticationDetailsServiceImpl implements UserDetailsService {
 	 */
 	
 	public MessageResponse validSignupRequest(SignupRequest signUpRequest) {
+		Preconditions.checkArgument(signUpRequest!=null,"SignUpRequest cannot be empty");
 		List<String> errors=new ArrayList<>();
 		
 		logger.info(Constants.INSIDE_INVALIDSIGNUPREQUEST);
 		
-		if(userRepository.existsByUsername(signUpRequest.getUsername())) {
+		if(signUpRequest.getUsername().isBlank()||authenticationRepository.existsByUsername(signUpRequest.getUsername())) {
 			errors.add(Constants.ERROR_USERNAME);
 			logger.debug(Constants.ERROR_USERNAME);
 		}
-		if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if(signUpRequest.getEmail().isBlank()||authenticationRepository.existsByEmail(signUpRequest.getEmail())) {
 			errors.add(Constants.ERROR_EMAIL);
 			logger.debug(Constants.ERROR_EMAIL);
 			
@@ -89,39 +92,6 @@ public class AuthenticationDetailsServiceImpl implements UserDetailsService {
 		return new MessageResponse<List<String>>(errors,errorcode);
 		
 	}
-	/**
-	 * This method creates profile.
-	 * 
-	 * @param Profile is an object that contains vital information like username, email etc..
-	 * @return  
-	 */
-	//User/Admin can create profile
-//	public MessageResponse<String> createProfileService(Profile profile) {
-//		logger.info(Constants.INSIDE_CREATEPROFILE_SERVICE);
-//		MessageResponse<String> response=new MessageResponse<>();
-//		try {
-//			profileRepository.save(profile);
-//			response.setErrorcode(Constants.SUCCESS);
-//			response.setMessage(Constants.PROFILE_CREATED);
-//		}catch(Exception e){
-//			logger.error("error:"+e.getMessage());
-//			e.printStackTrace();
-//			response.setErrorcode(Constants.SERVER_ERROR);
-//			response.setMessage("Unable to create a profile");
-//		}
-//		return response;
-//
-//	}
 	
-	/**
-	 * This method returns a list of profiles based on associateName.
-	 * @param associateName 
-	 * @return
-	 */
-	//Admin can Search Profile
-//	public List<Profile> findByName(String associateName) {
-//		logger.info(Constants.INSIDE_SEARCHPROFILE_SERVICE);
-//        return profileRepository.findByAssociateName(associateName);
-//    }
 	
 }

@@ -10,8 +10,6 @@ import javax.validation.constraints.Size;
 
 public class ProfileRequest {
 	
-	
-	
 	private int userId;
 	
 	@NotBlank
@@ -24,23 +22,12 @@ public class ProfileRequest {
 	
 	@NotBlank
 	@Size(max = 13)
-	private Long mobile;
+	private String mobile;
 	
 	@NotBlank
 	@Size(min=5, max = 30)
 	@Email
 	private String email;
-	
-	
-	//private List<String> skillSet;
-
-//	public List<String> getSkillSet() {
-//		return skillSet;
-//	}
-//
-//	public void setSkillSet(List<String> skillSet) {
-//		this.skillSet = skillSet;
-//	}
 
 	public int getUserId() {
 		return userId;
@@ -66,11 +53,11 @@ public class ProfileRequest {
 		this.associateId = associateId;
 	}
 
-	public Long getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(Long mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 

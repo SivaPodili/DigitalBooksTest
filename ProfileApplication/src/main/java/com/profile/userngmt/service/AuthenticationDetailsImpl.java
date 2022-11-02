@@ -107,4 +107,10 @@ public class AuthenticationDetailsImpl implements UserDetails {
 		AuthenticationDetailsImpl user = (AuthenticationDetailsImpl) o;
 		return Objects.equals(id, user.id);
 	}
+
+	public AuthenticationDetailsImpl() {
+		super();
+	}
+	
+	
 }

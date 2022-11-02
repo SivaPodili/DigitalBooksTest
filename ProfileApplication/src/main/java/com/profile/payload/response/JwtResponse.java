@@ -63,4 +63,10 @@ public class JwtResponse {
 	public List<String> getRoles() {
 		return roles;
 	}
+
+	public JwtResponse() {
+		super();
+	}
+	
+	
 }

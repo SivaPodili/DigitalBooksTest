@@ -1,5 +1,6 @@
 package com.profile.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,19 +13,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Preconditions;
 import com.profile.common.Constants;
 import com.profile.common.Path;
 import com.profile.model.Profile;
 import com.profile.service.SearchProfileService;
-import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
+import com.profile.userngmt.service.AuthenticationServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(Path.AUTH_PATH)
 
+
 public class SearchProfileController {
 	
-	private static final Logger logger =  LogManager.getLogger(AuthenticationController.class);
+	private static final Logger logger =  LogManager.getLogger(SearchProfileController.class);
 	
 	@Autowired
 	SearchProfileService searchProfileService;
@@ -38,10 +41,10 @@ public class SearchProfileController {
 	@GetMapping(Path.SEARCHPROFILE_PATH_V1)
 	@ResponseBody
 	public List<Profile> searchProfiles(@RequestParam String associateName) {
+		Preconditions.checkArgument(associateName!=null,"Associate Name cannot be empty");
 		logger.info(Constants.INSIDE_SEARCHPROFILE_CONTROLLER);
-		List<Profile> profileList = searchProfileService.findByName(associateName);
-		return profileList;
+		return searchProfileService.findByAssociateName(associateName);
+		
 	}
-
 
 }

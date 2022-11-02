@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.profile.common.Path;
 import com.profile.security.jwt.AuthEntryPointJwt;
 import com.profile.security.jwt.AuthTokenFilter;
-import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
+import com.profile.userngmt.service.AuthenticationServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +25,7 @@ import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	AuthenticationDetailsServiceImpl userDetailsService;
+	AuthenticationServiceImpl userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;

@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Preconditions;
 import com.profile.common.Constants;
 import com.profile.common.Path;
 import com.profile.model.Profile;
 import com.profile.payload.response.MessageResponse;
 import com.profile.service.CreateProfileService;
-import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
+import com.profile.userngmt.service.AuthenticationServiceImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -25,7 +26,7 @@ import com.profile.userngmt.service.AuthenticationDetailsServiceImpl;
 
 public class CreateProfileController {
 	
-	private static final Logger logger =  LogManager.getLogger(AuthenticationController.class);
+	private static final Logger logger =  LogManager.getLogger(CreateProfileController.class);
 	
 	@Autowired
 	CreateProfileService createProfileService;
@@ -39,10 +40,13 @@ public class CreateProfileController {
 	
 	@PostMapping(Path.CREATEPROFILE_PATH_V1)
 	public ResponseEntity<?> createProfile(@RequestBody @Valid Profile profile) {
+		Preconditions.checkArgument(profile!=null,"Profile cannot be empty");
 		ResponseEntity responseEntity;
 		logger.info(Constants.INSIDE_CREATEPROFILE_CONTROLLER);
-		MessageResponse messageResponse=createProfileService.createProfileService(profile);
-		if(messageResponse.getErrorcode()==Constants.SUCCESS) {
+		MessageResponse messageResponse;
+		
+		messageResponse=createProfileService.createProfileService(profile);
+		if(messageResponse!=null && messageResponse.getErrorcode()==Constants.SUCCESS) {
 			responseEntity=ResponseEntity.ok(messageResponse);
 		}else {
 			responseEntity=ResponseEntity.unprocessableEntity().body(messageResponse);

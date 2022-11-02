@@ -31,6 +31,11 @@ public class Constants {
 	public static final String INSIDE_SEARCHPROFILE_CONTROLLER="inside search profile method in controller class";
 	public static final int SERVER_ERROR = 500;
 	public static final String UNABLE_CTREATE_PROFILE = "Unable to create profile";
+	public static final String SEARCH_PROFILE_UNABLE = "Associate Name is not valid";
 	public static final String NO_ROLE = "No ERole for value: ";
+	
+	private Constants(){
+		
+	}
 
 }

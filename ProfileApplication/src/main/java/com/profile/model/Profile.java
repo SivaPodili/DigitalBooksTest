@@ -35,17 +35,7 @@ public class Profile {
 	@Size(min=5, max = 30)
 	@Email
 	private String email;
-	
-	
-	//private List<String> skillSet;
 
-//	public List<String> getSkillSet() {
-//		return skillSet;
-//	}
-//
-//	public void setSkillSet(List<String> skillSet) {
-//		this.skillSet = skillSet;
-//	}
 
 	public int getUserId() {
 		return userId;
