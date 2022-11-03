@@ -24,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.profile.common.Constants;
 import com.profile.controller.AuthenticationController;
 import com.profile.payload.response.JwtResponse;
 import com.profile.payload.response.MessageResponse;

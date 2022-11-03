@@ -8,22 +8,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.profile.common.Constants;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
+	
+	@Value("${unauthorized.message}")
+	String unauthorizedMessage;
+	
+	@Value("${error.unauthorized}")
+	String unauthorized;
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
-		logger.error(Constants.UNAUTHORIZED_MESSAGE, authException.getMessage());
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Constants.ERROR_UNAUTHORIZED);
+		logger.error(unauthorizedMessage, authException.getMessage());
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, unauthorized);
 	}
 
 }

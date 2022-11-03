@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Preconditions;
-import com.profile.common.Constants;
 import com.profile.common.Path;
 import com.profile.model.Profile;
 import com.profile.payload.response.JwtResponse;
@@ -44,6 +45,8 @@ import com.profile.userngmt.service.AuthenticationServiceImpl;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(Path.AUTH_PATH)
+@RefreshScope
+
 
 public class AuthenticationController {
 	
@@ -66,6 +69,16 @@ public class AuthenticationController {
 	@Autowired
 	AuthenticationServiceImpl authenticationServiceImpl;
 	
+	@Value("${user.registered.successfully}")
+	   String regMsg;
+	@Value("${signin.user}")
+	String signinUser;
+	
+	@Value("${register.user}")
+	String registerUser;
+	
+	
+	
 	/**
 	 * authenticateUser method is used to signin the user
 	 * @param loginRequest
@@ -75,7 +88,7 @@ public class AuthenticationController {
 		@PostMapping(Path.SIGNIN_PATH_V1)
 		public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 			Preconditions.checkArgument(loginRequest!=null,"loginRequest cannot be empty");
-			logger.info(Constants.SIGNIN_USER);
+			logger.info(signinUser);
 			ResponseEntity responseEntity=ResponseEntity.badRequest().body("Invalid Credentials");
 			
 			try {
@@ -106,13 +119,13 @@ public class AuthenticationController {
 		@PostMapping(Path.SIGNUP_PATH_V1)
 		public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 			Preconditions.checkArgument(signUpRequest!=null,"SignUpRequest cannot be empty");
-			logger.info(Constants.REGISTER_USER);
+			logger.info(registerUser);
 			
 			
 			ResponseEntity responseEntity;
 			MessageResponse messageResponse=authenticationServiceImpl.validSignupRequest(signUpRequest);
 			
-			if(messageResponse.getErrorcode()==Constants.BADREQUEST) {
+			if(messageResponse.getErrorcode()==400) {
 				responseEntity=ResponseEntity.badRequest().body(messageResponse);
 			}else {
 				// Create new user's account
@@ -121,10 +134,10 @@ public class AuthenticationController {
 				user.setRole(signUpRequest.getRole());
 
 				authenticationRepository.save(user);
-			 responseEntity =ResponseEntity.ok(new MessageResponse<String>(Constants.USER_REGISTERED_SUCCESSFULLY,Constants.SUCCESS));
+			 responseEntity =ResponseEntity.ok(new MessageResponse<String>(regMsg,200));
 				
 			}
-			logger.info(Constants.USER_REGISTERED_SUCCESSFULLY);
+			logger.info(regMsg);
 
 			return responseEntity;
 

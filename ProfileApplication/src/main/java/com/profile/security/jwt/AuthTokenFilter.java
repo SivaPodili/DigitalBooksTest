@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.profile.common.Constants;
 import com.profile.userngmt.service.AuthenticationServiceImpl;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -28,6 +28,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private AuthenticationServiceImpl userDetailsService;
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+	
+	@Value("${cannot.set.user.authentication}")
+	String unauthorized;
+	
+	@Value("${authorization}")
+	String authorization;
+	
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -45,16 +52,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			logger.error(Constants.CANNOT_SET_USER_AUTHENTICATION, e);
+			logger.error(unauthorized, e);
 		}
 
 		filterChain.doFilter(request, response);
 	}
 
 	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader(Constants.AUTHORIZATION);
+		String headerAuth = request.getHeader(authorization);
 
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(Constants.BEARER)) {
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
 			return headerAuth.substring(7, headerAuth.length());
 		}
 

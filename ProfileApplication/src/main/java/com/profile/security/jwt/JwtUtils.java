@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.profile.common.Constants;
 import com.profile.userngmt.service.AuthenticationDetailsImpl;
 
 import io.jsonwebtoken.*;
@@ -22,6 +21,21 @@ public class JwtUtils {
 
 	@Value("${bezkoder.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
+	
+	@Value("${invalid.jwt.signature}")
+	String invalidSignature;
+	
+	@Value("${invalid.jwt.token}")
+	String invalidToken;
+	
+	@Value("${jwt.token.expired}")
+	String tokenExpired;
+	
+	@Value("${jwt.token.unsupported}")
+	String tokenUnsupported;
+	
+	@Value("${jwt.claim.empty}")
+	String claimEmpty;
 
 	public String generateJwtToken(Authentication authentication) {
 
@@ -44,15 +58,15 @@ public class JwtUtils {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
 			return true;
 		} catch (SignatureException e) {
-			logger.error(Constants.INVALID_JWT_SIGNATURE, e.getMessage());
+			logger.error(invalidSignature, e.getMessage());
 		} catch (MalformedJwtException e) {
-			logger.error(Constants.INVALID_JWT_TOKEN, e.getMessage());
+			logger.error(invalidToken, e.getMessage());
 		} catch (ExpiredJwtException e) {
-			logger.error(Constants.JWT_TOKEN_EXPIRED, e.getMessage());
+			logger.error(tokenExpired, e.getMessage());
 		} catch (UnsupportedJwtException e) {
-			logger.error(Constants.JWT_TOKEN_UNSUPPORTED, e.getMessage());
+			logger.error(tokenUnsupported, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			logger.error(Constants.JWT_CLAIM_EMPTY, e.getMessage());
+			logger.error(claimEmpty, e.getMessage());
 		}
 
 		return false;

@@ -1,10 +1,13 @@
 package com.profile.userngmt.model;
 
-import com.profile.common.Constants;
+import org.springframework.beans.factory.annotation.Value;
 
 public enum ERole {
 	USER("USER"),
 	ADMIN("ADMIN");
+	
+	@Value("${no.role}")
+	static String noRole;
 	
 	public String name;
 	
@@ -27,7 +30,7 @@ public enum ERole {
 	            }
 	        }
 
-	        throw new IllegalArgumentException(Constants.NO_ROLE + textValue);  
+	        throw new IllegalArgumentException(noRole + textValue);  
 	    }   
 	
 }
