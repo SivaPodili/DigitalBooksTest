@@ -44,7 +44,7 @@ class CreateProfileServiceTest {
 		Profile profile=null;
 		boolean exceptionOccured=false;
 		try {
-		MessageResponse<String> entity=createProfileService.createProfileService(profile);
+		createProfileService.createProfileService(profile);
 		}catch(Exception e) {
 			exceptionOccured=true;
 		}

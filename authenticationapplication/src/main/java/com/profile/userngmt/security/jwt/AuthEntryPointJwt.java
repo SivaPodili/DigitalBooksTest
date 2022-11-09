@@ -1,4 +1,4 @@
-package com.profile.security.jwt;
+package com.profile.userngmt.security.jwt;
 
 import java.io.IOException;
 
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
-	
+
 	@Value("${unauthorized.message}")
 	String unauthorizedMessage;
-	
+
 	@Value("${error.unauthorized}")
 	String unauthorized;
 

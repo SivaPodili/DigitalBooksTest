@@ -1,13 +1,13 @@
 package com.profile.payload.response;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.profile.userngmt.model.User;
+import com.profile.userngmt.payload.response.JwtResponse;
 
 class JwtResponseTest {
 

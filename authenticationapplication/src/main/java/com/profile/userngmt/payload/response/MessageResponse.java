@@ -1,4 +1,4 @@
-package com.profile.payload.response;
+package com.profile.userngmt.payload.response;
 
 
 
@@ -32,6 +32,6 @@ public class MessageResponse<V> {
 		super();
 	}
 
-	
+
 
 }

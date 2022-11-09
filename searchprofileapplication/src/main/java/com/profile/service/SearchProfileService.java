@@ -16,25 +16,28 @@ import com.profile.model.Profile;
 @Service
 @RefreshScope
 public class SearchProfileService {
-	
+
 private static final Logger logger =  LogManager.getLogger(SearchProfileService.class);
-	
+
 	@Autowired
 	ProfileRepository profileRepository;
-	
+
 	@Value("${inside.searchprofile.service}")
 	String insideSPService;
-	
+
+	@Value("${associatename.cannot.empty}")
+	String AssocNameNotEmpty;
+
 	/**
 	 * This method returns a list of profiles based on associateName.
-	 * @param associateName 
+	 * @param associateName
 	 * @return
 	 */
 	//Admin can Search Profile
 	public List<Profile> findByAssociateName(String associateName) {
-		Preconditions.checkArgument(associateName!=null,"Associate Name cannot be empty");
+		Preconditions.checkArgument(associateName!=null,AssocNameNotEmpty);
 		logger.info(insideSPService);
         return profileRepository.findByAssociateName(associateName);
-    }	
+    }
 
 }

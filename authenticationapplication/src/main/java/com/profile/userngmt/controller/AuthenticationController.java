@@ -8,8 +8,6 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -20,24 +18,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Preconditions;
-import com.profile.common.Path;
-import com.profile.payload.response.JwtResponse;
-import com.profile.payload.response.MessageResponse;
-
-import com.profile.security.jwt.JwtUtils;
+import com.profile.userngmt.common.Path;
 import com.profile.userngmt.dao.AuthenticationRepository;
 import com.profile.userngmt.model.LoginRequest;
 import com.profile.userngmt.model.SignupRequest;
 import com.profile.userngmt.model.User;
+import com.profile.userngmt.payload.response.JwtResponse;
+import com.profile.userngmt.payload.response.MessageResponse;
+import com.profile.userngmt.security.jwt.JwtUtils;
 import com.profile.userngmt.service.AuthenticationDetailsImpl;
 import com.profile.userngmt.service.AuthenticationServiceImpl;
 
@@ -48,36 +42,36 @@ import com.profile.userngmt.service.AuthenticationServiceImpl;
 
 
 public class AuthenticationController {
-	
+
 	private static final Logger logger =  LogManager.getLogger(AuthenticationController.class);
-	
+
 	@Autowired
 	AuthenticationManager authenticationManager;
 
 	@Autowired
 	AuthenticationRepository authenticationRepository;
 
-	
+
 
 	@Autowired
 	PasswordEncoder encoder;
 
 	@Autowired
 	JwtUtils jwtUtils;
-	
+
 	@Autowired
 	AuthenticationServiceImpl authenticationServiceImpl;
-	
+
 	@Value("${user.registered.successfully}")
 	   String regMsg;
 	@Value("${signin.user}")
 	String signinUser;
-	
+
 	@Value("${register.user}")
 	String registerUser;
-	
-	
-	
+
+
+
 	/**
 	 * authenticateUser method is used to signin the user
 	 * @param loginRequest
@@ -88,8 +82,8 @@ public class AuthenticationController {
 		public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 			Preconditions.checkArgument(loginRequest!=null,"loginRequest cannot be empty");
 			logger.info(signinUser);
-			ResponseEntity responseEntity=ResponseEntity.badRequest().body("Invalid Credentials");
-			
+			ResponseEntity<?> responseEntity=ResponseEntity.badRequest().body("Invalid Credentials");
+
 			try {
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -119,11 +113,11 @@ public class AuthenticationController {
 		public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 			Preconditions.checkArgument(signUpRequest!=null,"SignUpRequest cannot be empty");
 			logger.info(registerUser);
-			
-			
-			ResponseEntity responseEntity;
-			MessageResponse messageResponse=authenticationServiceImpl.validSignupRequest(signUpRequest);
-			
+
+
+			ResponseEntity<?> responseEntity;
+			MessageResponse<?> messageResponse=authenticationServiceImpl.validSignupRequest(signUpRequest);
+
 			if(messageResponse.getErrorcode()==400) {
 				responseEntity=ResponseEntity.badRequest().body(messageResponse);
 			}else {
@@ -133,14 +127,14 @@ public class AuthenticationController {
 				user.setRole(signUpRequest.getRole());
 
 				authenticationRepository.save(user);
-			 responseEntity =ResponseEntity.ok(new MessageResponse<String>(regMsg,200));
-				
+			 responseEntity =ResponseEntity.ok(new MessageResponse<>(regMsg,200));
+
 			}
 			logger.info(regMsg);
 
 			return responseEntity;
 
-		}		
-		
+		}
+
 
 }

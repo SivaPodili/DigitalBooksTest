@@ -14,41 +14,41 @@ public class ProfileRequestTest {
 		profilerequest.setUserId(1);
 		int id=profilerequest.getUserId();
 		assertEquals(1,id);
-		
+
 	}
-	
+
 	@Test
 	public void associateIdTest() {
 		profilerequest.setAssociateId("CTS-00010");
 		String associateId=profilerequest.getAssociateId();
 		assertEquals("CTS-00010",associateId);
-		
+
 	}
-	
+
 	@Test
 	public void associateNameTest() {
 		profilerequest.setAssociateName("sivapodili");
 		String associateName=profilerequest.getAssociateName();
 		assertEquals("sivapodili",associateName);
-		
+
 	}
-	
+
 	@Test
 	public void mobileTest() {
 		profilerequest.setMobile("8987678988");
 		String mobile=profilerequest.getMobile();
 		assertEquals("8987678988",mobile);
-		
+
 	}
-	
+
 	@Test
 	public void emailTest() {
 		profilerequest.setEmail("siva@gmail.com");
 		String email=profilerequest.getEmail();
 		assertEquals("siva@gmail.com",email);
-		
+
 	}
-	
+
 	@Test
 	public void toString_userIdTest()
 	{
@@ -56,7 +56,7 @@ public class ProfileRequestTest {
 	    assertTrue(toString.contains("userId=" + profilerequest.getUserId()));
 
 	}
-	
+
 	@Test
 	public void toString_associateNameTest()
 	{
@@ -64,7 +64,7 @@ public class ProfileRequestTest {
 	    assertTrue(toString.contains("associateName=" + profilerequest.getAssociateName()));
 
 	}
-	
+
 	@Test
 	public void toString_associateIdTest()
 	{

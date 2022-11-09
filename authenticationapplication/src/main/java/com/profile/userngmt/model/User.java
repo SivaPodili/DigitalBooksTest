@@ -1,16 +1,21 @@
 package com.profile.userngmt.model;
 
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(	name = "users", 
-		uniqueConstraints = { 
+@Table(	name = "users",
+		uniqueConstraints = {
 			@UniqueConstraint(columnNames = "username"),
-			@UniqueConstraint(columnNames = "email") 
+			@UniqueConstraint(columnNames = "email")
 		})
 public class User {
 	@Id
@@ -83,5 +88,5 @@ public class User {
 		this.password = password;
 	}
 
-	
+
 }

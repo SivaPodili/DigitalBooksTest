@@ -1,4 +1,4 @@
-package com.profile.security.jwt;
+package com.profile.userngmt.security.jwt;
 
 import java.io.IOException;
 
@@ -29,14 +29,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private AuthenticationServiceImpl userDetailsService;
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
-	
-	@Value("${cannot.set.user.authentication}")
-	String unauthorized;
-	
+	private Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+	@Value("${cannot.set.authenication}")
+	String unauthorization;
+
 	@Value("${authorization}")
-	String authorization;
-	
+	String authorized;
+
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -54,14 +54,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			logger.error(unauthorized, e);
+			logger.error(unauthorization, e);
 		}
 
 		filterChain.doFilter(request, response);
 	}
 
 	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader(authorization);
+		String headerAuth = request.getHeader(authorized);
 
 		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
 			return headerAuth.substring(7, headerAuth.length());

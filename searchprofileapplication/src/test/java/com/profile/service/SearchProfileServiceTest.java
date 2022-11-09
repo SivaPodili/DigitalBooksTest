@@ -1,6 +1,7 @@
 package com.profile.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.profile.dao.ProfileRepository;
 import com.profile.model.Profile;
-@SpringBootTest( 
+@SpringBootTest(
 		  properties = {"spring.cloud.config.enabled=false"}
 		)
 class SearchProfileServiceTest {
@@ -23,17 +24,17 @@ class SearchProfileServiceTest {
 	@MockBean
 	ProfileRepository profileRepository;
 
-	 @Test	    
+	 @Test
 	 public void searchbyAssociateNameTest(){
 		 Profile profile=new Profile();
 		 profile.setAssociateName("sivapodili");
 		 String name=profile.getAssociateName();
-	    	List<Profile> list=new ArrayList<Profile>();
+	    	List<Profile> list=new ArrayList<>();
 	    	 when(profileRepository.findByAssociateName("sivapodili")).thenReturn(list);
 	    	 List<Profile> list1 = searchProfileService.findByAssociateName(name);
 	    	 assertEquals(list1,list);
-	    	
-	    	
+
+
 }
 
 	 @Test
@@ -41,13 +42,13 @@ class SearchProfileServiceTest {
 		String associateName=null;
 			boolean exceptionOccured=false;
 			try {
-				List<Profile> list=searchProfileService.findByAssociateName(associateName);
+				searchProfileService.findByAssociateName(associateName);
 			}catch(Exception e) {
 				exceptionOccured=true;
 			}
 			assertTrue(exceptionOccured);
-			
-			
+
+
 		}
 
 }

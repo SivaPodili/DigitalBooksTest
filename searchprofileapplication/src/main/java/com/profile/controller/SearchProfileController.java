@@ -1,6 +1,5 @@
 package com.profile.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,14 +25,17 @@ import com.profile.service.SearchProfileService;
 @RefreshScope
 
 public class SearchProfileController {
-	
+
 	private static final Logger logger =  LogManager.getLogger(SearchProfileController.class);
-	
+
 	@Autowired
 	SearchProfileService searchProfileService;
-	
+
 	@Value("${inside.searchprofile.controller}")
 	String insideSPController;
+
+	@Value("${associatename.cannot.empty}")
+	String AssocNameNotEmpty;
 
 	/**
 	 * searchProfiles method is used to search the profile based on associate name
@@ -44,10 +46,10 @@ public class SearchProfileController {
 	@GetMapping(Path.SEARCHPROFILE_PATH_V1)
 	@ResponseBody
 	public List<Profile> searchProfiles(@RequestParam String associateName) {
-		Preconditions.checkArgument(associateName!=null,"Associate Name cannot be empty");
+		Preconditions.checkArgument(associateName!=null,AssocNameNotEmpty);
 		logger.info(insideSPController);
 		return searchProfileService.findByAssociateName(associateName);
-		
+
 	}
 
 }

@@ -7,12 +7,12 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public enum ERole {
 	USER("USER"),
 	ADMIN("ADMIN");
-	
+
 	@Value("${no.role}")
 	static String noRole;
-	
+
 	public String name;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -22,8 +22,8 @@ public enum ERole {
 	private ERole(String name) {
 		this.setName(name);
 	}
-	
-	
+
+
 	 public static ERole textValueOf(String textValue){
 
 	        for(ERole value : values()) {
@@ -32,7 +32,7 @@ public enum ERole {
 	            }
 	        }
 
-	        throw new IllegalArgumentException(noRole + textValue);  
-	    }   
-	
+	        throw new IllegalArgumentException(noRole + textValue);
+	    }
+
 }

@@ -15,34 +15,35 @@ import com.profile.payload.response.MessageResponse;
 @Service
 @RefreshScope
 public class CreateProfileService {
-	
+
 	private static final Logger logger =  LogManager.getLogger(CreateProfileService.class);
-	
+
 	@Autowired
 	ProfileRepository profileRepository;
-	
+
 	@Value("${inside.createprofile.service}")
 	String insideCPService;
-	
+
 	@Value("${profile.created}")
 	String profileCreated;
-	
+
 	@Value("${unable.create.profile}")
 	String unableCreateProfile;
-	
-	
-	
+
+
+
 	/**
 	 * This method creates profile.
-	 * 
+	 *
 	 * @param Profile is an object that contains vital information like username, email etc..
-	 * @return  
+	 * @return
 	 */
 	//User can create profile
 	public MessageResponse<String> createProfileService(Profile profile) {
 		Preconditions.checkArgument(profile!=null,"Profile cannot be empty");
 		logger.info(insideCPService);
 		MessageResponse<String> response=new MessageResponse<>();
+
 		try {
 			profileRepository.save(profile);
 			response.setErrorcode(200);

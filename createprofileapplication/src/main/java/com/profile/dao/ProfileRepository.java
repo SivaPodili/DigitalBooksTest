@@ -13,6 +13,6 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer> {
 	Profile save(ProfileRequest requesProfile);
 
 	List<Profile> findByAssociateName(String associateName);
-	
+
 
 }

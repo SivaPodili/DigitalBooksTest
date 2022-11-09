@@ -1,4 +1,4 @@
-package com.profile.payload.response;
+package com.profile.userngmt.payload.response;
 
 import java.util.List;
 
@@ -65,6 +65,6 @@ public class JwtResponse {
 	public JwtResponse() {
 		super();
 	}
-	
-	
+
+
 }

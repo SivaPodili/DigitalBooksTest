@@ -26,30 +26,35 @@ import com.profile.service.CreateProfileService;
 @RefreshScope
 
 public class CreateProfileController {
-	
+
 	private static final Logger logger =  LogManager.getLogger(CreateProfileController.class);
-	
+
 	@Autowired
 	CreateProfileService createProfileService;
-	
+
 	@Value("${inside.createprofile.controller}")
 	String insideCPController;
-	
+
 	/**
 	 * createProfile method is used to create a profile.
-	 * @param profile 
+	 * @param profile
 	 * @return
 	 * constant string is returned.
 	 */
-	
+
 	@PostMapping(Path.CREATEPROFILE_PATH_V1)
 	public ResponseEntity<?> createProfile(@RequestBody @Valid Profile profile) {
 		Preconditions.checkArgument(profile!=null,"Profile cannot be empty");
-		ResponseEntity responseEntity;
+		ResponseEntity<?> responseEntity;
 		logger.info(insideCPController);
-		MessageResponse messageResponse;
-		
+		MessageResponse<?> messageResponse;
+
 		messageResponse=createProfileService.createProfileService(profile);
+		
+		if(!profile.getAssociateId().startsWith("CTS")) {
+			messageResponse=new MessageResponse<>("Associate Id must starts with CTS",400);
+			
+		}
 		if(messageResponse!=null && messageResponse.getErrorcode()==200) {
 			responseEntity=ResponseEntity.ok(messageResponse);
 		}else {

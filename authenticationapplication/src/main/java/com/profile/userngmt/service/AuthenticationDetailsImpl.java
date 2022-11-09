@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +25,7 @@ public class AuthenticationDetailsImpl implements UserDetails {
 	private String password;
 
 	private Collection<? extends GrantedAuthority> authorities;
-	
+
 	public AuthenticationDetailsImpl(Long id, String username, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
@@ -35,7 +34,7 @@ public class AuthenticationDetailsImpl implements UserDetails {
 		this.password = password;
 		this.authorities = authorities;
 	}
-	
+
 	/**
 	 * AuthenticationDetailsImpl method will be getting called when the application receives client requests and check the authentication
 	 * @param user
@@ -46,14 +45,14 @@ public class AuthenticationDetailsImpl implements UserDetails {
 		authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
 		return new AuthenticationDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
+				user.getId(),
+				user.getUsername(),
 				user.getEmail(),
-				user.getPassword(), 
+				user.getPassword(),
 				authorities);
 	}
-	
-	
+
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -111,6 +110,6 @@ public class AuthenticationDetailsImpl implements UserDetails {
 	public AuthenticationDetailsImpl() {
 		super();
 	}
-	
-	
+
+
 }
