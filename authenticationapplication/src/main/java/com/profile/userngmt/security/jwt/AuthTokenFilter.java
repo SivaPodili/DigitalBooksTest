@@ -29,7 +29,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private AuthenticationServiceImpl userDetailsService;
 
-	private Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+	private Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
 
 	@Value("${cannot.set.authenication}")
 	String unauthorization;
@@ -54,7 +54,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (Exception e) {
-			logger.error(unauthorization, e);
+			log.error(unauthorization, e);
 		}
 
 		filterChain.doFilter(request, response);

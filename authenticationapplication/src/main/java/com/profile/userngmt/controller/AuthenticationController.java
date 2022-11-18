@@ -35,6 +35,10 @@ import com.profile.userngmt.security.jwt.JwtUtils;
 import com.profile.userngmt.service.AuthenticationDetailsImpl;
 import com.profile.userngmt.service.AuthenticationServiceImpl;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(Path.AUTH_PATH)
@@ -77,9 +81,18 @@ public class AuthenticationController {
 	 * @param loginRequest
 	 * @return
 	 */
-	//User Sign in
+	
+	@ApiOperation(value="Signin",notes="Request User to Signin", nickname="signin")
+	
+	@ApiResponses(value = {
+			
+	        @ApiResponse(code = 500, message = "Internal Server Error"),
+	         @ApiResponse(code = 400, message = "Invalid Credentials"),
+	        @ApiResponse(code = 200, message = "User Successfully Signed in"
+	           ) })
+	
 		@PostMapping(Path.SIGNIN_PATH_V1)
-		public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		public ResponseEntity authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 			Preconditions.checkArgument(loginRequest!=null,"loginRequest cannot be empty");
 			logger.info(signinUser);
 			ResponseEntity<?> responseEntity=ResponseEntity.badRequest().body("Invalid Credentials");
@@ -92,10 +105,8 @@ public class AuthenticationController {
 			String jwt = jwtUtils.generateJwtToken(authentication);
 
 			AuthenticationDetailsImpl userDetails = (AuthenticationDetailsImpl) authentication.getPrincipal();
-			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-					.collect(Collectors.toList());
 			responseEntity=ResponseEntity.ok(
-					new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+					new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail()));
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -108,9 +119,18 @@ public class AuthenticationController {
 	 * @param signUpRequest
 	 * @return
 	 */
-	//User Sign up
+	
+	@ApiOperation(value="registerUser",notes="Request User to register", nickname="registerUser")
+	
+	@ApiResponses(value = {
+			
+	        @ApiResponse(code = 500, message = "Internal Server Error"),
+	         @ApiResponse(code = 400, message = "Bad Request"),
+	        @ApiResponse(code = 200, message = "User Successfully Registered"
+	           ) })
+	
 		@PostMapping(Path.SIGNUP_PATH_V1)
-		public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		public ResponseEntity registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 			Preconditions.checkArgument(signUpRequest!=null,"SignUpRequest cannot be empty");
 			logger.info(registerUser);
 
@@ -124,7 +144,6 @@ public class AuthenticationController {
 				// Create new user's account
 				User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
 						encoder.encode(signUpRequest.getPassword()));
-				user.setRole(signUpRequest.getRole());
 
 				authenticationRepository.save(user);
 			 responseEntity =ResponseEntity.ok(new MessageResponse<>(regMsg,200));

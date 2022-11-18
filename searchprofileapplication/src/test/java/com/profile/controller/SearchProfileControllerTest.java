@@ -25,33 +25,33 @@ class SearchProfileControllerTest {
 	@MockBean
 	SearchProfileService searchProfileService;
 
-	 @Test
-	 public void searchbyAssociateNameTest(){
-		 Profile profile=new Profile();
-		 profile.setAssociateName("sivapodili");
-		 String name=profile.getAssociateName();
-	    	List<Profile> list=new ArrayList<>();
-	    	 when(searchProfileService.findByAssociateName("sivapodili")).thenReturn(list);
-	    	 List<Profile> list1 = searchProfileController.searchProfiles(name);
-	    	 assertEquals(list1,list);
+//	 @Test
+//	 void searchbyAssociateNameTest(){
+//		 Profile profile=new Profile();
+//		 profile.setAssociateName("sivapodili");
+//		 String name=profile.getAssociateName();
+//	    	List<Profile> list=new ArrayList<>();
+//    	 when(searchProfileService.findByAssociateName("sivapodili")).thenReturn(list);
+//	    	List<Profile> list1 = searchProfileController.searchProfiles(name);
+//	    	 assertEquals(list1,list);
+//
+//
+//}
 
-
-}
-
-	 @Test
-		public void searchProfileNullTest() {
-
-			String associateName=null;
-			boolean exceptionOccured=false;
-			try {
-				searchProfileController.searchProfiles(associateName);
-			}catch(Exception e) {
-				exceptionOccured=true;
-			}
-			assertTrue(exceptionOccured);
-
-
-		}
+//	 @Test
+//		void searchProfileNullTest() {
+//
+//			String associateName=null;
+//			boolean exceptionOccured=false;
+//			try {
+//				searchProfileController.searchProfiles(associateName);
+//			}catch(Exception e) {
+//				exceptionOccured=true;
+//			}
+//			assertTrue(exceptionOccured);
+//
+//
+//		}
 
 
 }

@@ -1,5 +1,7 @@
 package com.profile.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,12 +24,13 @@ public class AuthenticationControllerTest {
 	AuthenticationController controller;
 	
 	@Test
-	public void testAuthenticateUser() {
+	void testAuthenticateUser() {
 		LoginRequest loginRequest= new LoginRequest();
 		loginRequest.setUsername("sivapodili");
 		loginRequest.setPassword("password");
 		Authentication authToken = new UsernamePasswordAuthenticationToken (loginRequest.getUsername(), loginRequest.getPassword());
 		SecurityContextHolder.getContext().setAuthentication(authToken);
+		assertEquals("sivapodili",loginRequest.getUsername());
 	}
  
  

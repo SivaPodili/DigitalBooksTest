@@ -27,20 +27,20 @@ class CreateProfileServiceTest {
 	ProfileRepository profileRepository;
 	
 	@Test
-	public void CreateProfileServicePositiveTest() {
+	void CreateProfileServicePositiveTest() {
 		
 		Profile profile=new Profile();
 		profile.setAssociateName("siva");
 		
 		when(profileRepository.save(any(Profile.class))).thenReturn(profile);
 		MessageResponse<String> entity=createProfileService.createProfileService(profile);
-		assertThat(entity.equals(profile));
+		assertThat(entity).isEqualTo(profile);
 		
 		
 	}
 	
 	@Test
-	public void CreateProfileServiceNullTest() {
+	void CreateProfileServiceNullTest() {
 		Profile profile=null;
 		boolean exceptionOccured=false;
 		try {

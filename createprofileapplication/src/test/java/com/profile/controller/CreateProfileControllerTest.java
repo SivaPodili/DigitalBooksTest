@@ -33,13 +33,10 @@ class CreateProfileControllerTest {
 
 	Profile mockValidProfile;
 	
-	@Before
-	public void setUp() {
-		
-	}
+	
 	
 	@Test
-	 public void createProfilePositiveTest() {
+	 void createProfilePositiveTest() {
 		
 		mockValidProfile=new Profile();
 		mockValidProfile.setUserId(1);
@@ -54,7 +51,7 @@ class CreateProfileControllerTest {
 		 }
 
 	@Test
-	 public void createProfileNagativeTest() {
+	 void createProfileNagativeTest() {
 		 Profile profile=new Profile();
 		 profile.setUserId(1);
 		 profile.setAssociateId("CTS-00010");
@@ -70,7 +67,7 @@ class CreateProfileControllerTest {
 		 }
 	
 	@Test
-	public void createProfileNullTest() {
+	void createProfileNullTest() {
 		
 		Profile profile=null;
 		boolean exceptionOccured=false;

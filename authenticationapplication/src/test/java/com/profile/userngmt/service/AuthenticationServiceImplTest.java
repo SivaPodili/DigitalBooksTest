@@ -1,6 +1,6 @@
 package com.profile.userngmt.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ class AuthenticationServiceImplTest {
 	AuthenticationServiceImpl authenticationServiceImpl;
 
 	@Test
-	  public void ValidUsernameTest()
+	  void ValidUsernameTest()
 	  {
 	    UserDetails userDetails = authenticationServiceImpl.loadUserByUsername ("sivapodili");
 	    Authentication authToken = new UsernamePasswordAuthenticationToken (userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 	    SecurityContextHolder.getContext().setAuthentication(authToken);
-	    assertThat(authToken);
+	    assertEquals("sivapodili",userDetails.getUsername());
 	    
 	  }
 	

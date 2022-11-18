@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Preconditions;
@@ -20,9 +19,12 @@ import com.profile.model.Profile;
 import com.profile.payload.response.MessageResponse;
 import com.profile.service.CreateProfileService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(Path.AUTH_PATH)
 @RefreshScope
 
 public class CreateProfileController {
@@ -34,6 +36,7 @@ public class CreateProfileController {
 
 	@Value("${inside.createprofile.controller}")
 	String insideCPController;
+	
 
 	/**
 	 * createProfile method is used to create a profile.
@@ -42,8 +45,16 @@ public class CreateProfileController {
 	 * constant string is returned.
 	 */
 
+	@ApiOperation(value="createProfile",notes="create profile method is used to add profiles to the database", nickname="createProfile")
+	
+	@ApiResponses(value = {
+			
+	        @ApiResponse(code = 500, message = "Unable to create profile"),
+	         @ApiResponse(code = 400, message = "Associate Id must starts with CTS"),
+	        @ApiResponse(code = 200, message = "User Successfully Created the profile"
+	           ) })
 	@PostMapping(Path.CREATEPROFILE_PATH_V1)
-	public ResponseEntity<?> createProfile(@RequestBody @Valid Profile profile) {
+	public ResponseEntity createProfile(@RequestBody @Valid Profile profile) {
 		Preconditions.checkArgument(profile!=null,"Profile cannot be empty");
 		ResponseEntity<?> responseEntity;
 		logger.info(insideCPController);

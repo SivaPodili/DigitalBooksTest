@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Preconditions;
 import com.profile.userngmt.dao.AuthenticationRepository;
-import com.profile.userngmt.model.ERole;
 import com.profile.userngmt.model.SignupRequest;
 import com.profile.userngmt.model.User;
 import com.profile.userngmt.payload.response.MessageResponse;
@@ -43,8 +42,6 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 	@Value("${error.email}")
 	String invalidEmail;
 
-	@Value("${error.role}")
-	String invalidRole;
 
 	@Override
 	@Transactional
@@ -66,7 +63,7 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 	 *
 	 */
 
-	public MessageResponse<?> validSignupRequest(SignupRequest signUpRequest) {
+	public MessageResponse validSignupRequest(SignupRequest signUpRequest) {
 		Preconditions.checkArgument(signUpRequest!=null,"SignUpRequest cannot be empty");
 		List<String> errors=new ArrayList<>();
 
@@ -82,17 +79,7 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 
 		}
 
-		/*
-		 * In general, role is either USER or ADMIN. Others are considered as Illegal Arguments.
-		 * Invalid Role error message will be added when an Illegal Argument Exception occured.
-		 */
-		try {
-			ERole.textValueOf(signUpRequest.getRole());
-		} catch (Exception e) {
-			logger.debug(invalidRole);
-			errors.add(invalidRole);
 
-		}
 		/*
 		 * During the validation, multiple errors may occur.
 		 * In such case, size of the error list will be greater than zero.

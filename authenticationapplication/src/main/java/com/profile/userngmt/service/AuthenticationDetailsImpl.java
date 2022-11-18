@@ -42,7 +42,7 @@ public class AuthenticationDetailsImpl implements UserDetails {
 	 */
 	public static AuthenticationDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(user.getRole()));
+		
 
 		return new AuthenticationDetailsImpl(
 				user.getId(),

@@ -21,7 +21,7 @@ import com.profile.userngmt.security.jwt.JwtUtils;
 @SpringBootTest( 
 		  properties = {"spring.cloud.config.enabled=false"}
 		)
-public class AuthenticationFlowTest {
+class AuthenticationFlowTest {
 	
 	@Autowired
 	AuthenticationController authenticationController;
@@ -41,7 +41,7 @@ public class AuthenticationFlowTest {
 	
 
 	@Test
-	public void entryNullCheckTest() {
+	void entryNullCheckTest() {
 		boolean exceptionOccured=false;
 		try {
 		authenticationController.registerUser(null);
@@ -60,41 +60,40 @@ public class AuthenticationFlowTest {
 	}
 	
 	@Test
-	public void entryPositiveTest() {
+	void entryPositiveTest() {
 		LoginRequest loginRequest=new LoginRequest();
 		SignupRequest signupRequest=new SignupRequest();
 		signupRequest.setUsername("rammohan");
 		signupRequest.setPassword("Abcd1245@");
 		signupRequest.setEmail("mohan@gmail.com");
-		signupRequest.setRole("USER");
+		
 		
 		ResponseEntity<?> responseEntity=authenticationController.registerUser(signupRequest);
-		assertEquals(responseEntity.getStatusCode(),HttpStatus.OK);
+		assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
 		
 		loginRequest.setUsername("sivapodili");
 		loginRequest.setPassword("password");
 		ResponseEntity<?> responseEntity1=authenticationController.authenticateUser(loginRequest);
-		assertEquals(responseEntity1.getStatusCode(),HttpStatus.OK);		
+		assertEquals(HttpStatus.OK,responseEntity1.getStatusCode());	
 		
 	}
 	
 	@Test
-	public void entryNegativeTest() {
+	void entryNegativeTest() {
 		
 		
 		signupRequest.setUsername("");
 		signupRequest.setPassword("");
 		signupRequest.setEmail("");
-		signupRequest.setRole("");
 		
 		ResponseEntity<?> responseEntity=authenticationController.registerUser(signupRequest);
-		 assertEquals(responseEntity.getStatusCode(),HttpStatus.BAD_REQUEST);
+		 assertEquals(HttpStatus.BAD_REQUEST,responseEntity.getStatusCode());
 		
 		loginRequest.setUsername("");
 		loginRequest.setPassword("");
 		
 		ResponseEntity<?> responseEntity1=authenticationController.authenticateUser(loginRequest);
-			 assertEquals(responseEntity1.getStatusCode(),HttpStatus.BAD_REQUEST);
+			 assertEquals(HttpStatus.BAD_REQUEST, responseEntity1.getStatusCode());
 	}
 	
 	

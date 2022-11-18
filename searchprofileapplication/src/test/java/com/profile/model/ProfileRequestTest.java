@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class ProfileRequestTest {
+class ProfileRequestTest {
 
 	ProfileRequest profilerequest =new ProfileRequest();
 
 	@Test
-	public void UserIdTest() {
+	 void UserIdTest() {
 		profilerequest.setUserId(1);
 		int id=profilerequest.getUserId();
 		assertEquals(1,id);
@@ -18,7 +18,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void associateIdTest() {
+	 void associateIdTest() {
 		profilerequest.setAssociateId("CTS-00010");
 		String associateId=profilerequest.getAssociateId();
 		assertEquals("CTS-00010",associateId);
@@ -26,7 +26,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void associateNameTest() {
+	 void associateNameTest() {
 		profilerequest.setAssociateName("sivapodili");
 		String associateName=profilerequest.getAssociateName();
 		assertEquals("sivapodili",associateName);
@@ -34,7 +34,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void mobileTest() {
+	 void mobileTest() {
 		profilerequest.setMobile("8987678988");
 		String mobile=profilerequest.getMobile();
 		assertEquals("8987678988",mobile);
@@ -42,7 +42,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void emailTest() {
+	 void emailTest() {
 		profilerequest.setEmail("siva@gmail.com");
 		String email=profilerequest.getEmail();
 		assertEquals("siva@gmail.com",email);
@@ -50,7 +50,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void toString_userIdTest()
+	 void toString_userIdTest()
 	{
 		String toString = profilerequest.toString();
 	    assertTrue(toString.contains("userId=" + profilerequest.getUserId()));
@@ -58,7 +58,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void toString_associateNameTest()
+	 void toString_associateNameTest()
 	{
 		String toString = profilerequest.toString();
 	    assertTrue(toString.contains("associateName=" + profilerequest.getAssociateName()));
@@ -66,7 +66,7 @@ public class ProfileRequestTest {
 	}
 
 	@Test
-	public void toString_associateIdTest()
+	 void toString_associateIdTest()
 	{
 		String toString = profilerequest.toString();
 	    assertTrue(toString.contains("associateName=" + profilerequest.getAssociateId()));

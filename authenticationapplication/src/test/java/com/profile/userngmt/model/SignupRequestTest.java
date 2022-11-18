@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class SignupRequestTest {
+class SignupRequestTest {
 
 SignupRequest signupRequest= new SignupRequest();
 	
 	@Test
-	public void UsernameTest() {
+	void UsernameTest() {
 		signupRequest.setUsername("siva");
 		String username=signupRequest.getUsername();
 		assertEquals("siva", username);
@@ -17,7 +17,7 @@ SignupRequest signupRequest= new SignupRequest();
 	}
 	
 	@Test
-	public void emailTest() {
+	void emailTest() {
 		signupRequest.setEmail("siva@gmail.com");
 		String email=signupRequest.getEmail();
 		assertEquals("siva@gmail.com", email);
@@ -25,22 +25,14 @@ SignupRequest signupRequest= new SignupRequest();
 	}
 	
 	@Test
-	public void passwordTest() {
+	void passwordTest() {
 		signupRequest.setPassword("password");
 		String password=signupRequest.getPassword();
 		assertEquals("password", password);
 		
 	}
 	
-	@Test
-	public void roleTest() {
-		
-		signupRequest.setRole("USER");
-		
-		String role =signupRequest.getRole();
-		assertEquals("USER",role);
-		
-	}
+	
 
 
 }

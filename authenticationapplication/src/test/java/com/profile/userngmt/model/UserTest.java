@@ -1,24 +1,21 @@
 package com.profile.userngmt.model;
 
-
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+class UserTest {
 
 User author=new User();
 @Test	
-public void idTest() {
+void idTest() {
 	author.setId(1L);
 	Long id=author.getId();
-	assertThat(1L).isEqualTo(id);
+	assertEquals(1L, id);
 }
 	
 	@Test
-	public void userNameTest() {
+void userNameTest() {
 		author.setUsername("siva");
 		String name=author.getUsername();
 		assertEquals("siva",name);
@@ -27,7 +24,7 @@ public void idTest() {
 	}
 	
 	@Test
-	public void emailTest() {
+	void emailTest() {
 		author.setEmail("siva@gmail.com");
 		String email=author.getEmail();
 		assertEquals("siva@gmail.com",email);
@@ -36,7 +33,7 @@ public void idTest() {
 	}
 	
 	@Test
-	public void passwordTest() {
+	void passwordTest() {
 		author.setPassword("password");
 		String pass=author.getPassword();
 		assertEquals("password",pass);
@@ -44,17 +41,9 @@ public void idTest() {
 		
 	}
 	
-	@Test
-	public void roleTest() {
-		
-		author.setRole("USER");
-		String role =author.getRole();
-		assertEquals("USER",role);
-		
-	}
 	
 	@Test
-	public void ConstructorTest() {
+	void ConstructorTest() {
 		String username="siva";
 		String email="siva@gmail.com";
 		String password="password";
